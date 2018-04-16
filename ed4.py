@@ -65,9 +65,9 @@ class Male(Female):
                 female.updatePayoff(raise_cost + reward)
                 return self.reproduce(female, randomness)
             else:
-                payment = raise_cost/2 + reward + time_cost
+                payment = reward + time_cost
                 self.updatePayoff(payment)
-                female.updatePayoff(payment)
+                female.updatePayoff(raise_cost + reward + time_cost)
                 return self.reproduce(female, randomness)
 
 
@@ -164,7 +164,7 @@ pop = 200
 coy = 100
 faithful = 100
 years = 100
-raise_cost = -12
+raise_cost = -20
 reward = 0
 time_cost = -2
 maxAge = 10

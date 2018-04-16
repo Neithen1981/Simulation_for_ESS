@@ -65,7 +65,10 @@ class Male(Female):
                 female.updatePayoff(raise_cost + reward)
                 return self.reproduce(female, randomness)
             else:
-                raise Exception()
+                payment = reward + time_cost
+                self.updatePayoff(payment)
+                female.updatePayoff(raise_cost + reward + time_cost)
+                return self.reproduce(female, randomness)
 
 
 def simulation(pop, faithful, coy, years, raise_cost, reward, time_cost, maxAge, maxPop, randomness):
@@ -87,7 +90,7 @@ def simulation(pop, faithful, coy, years, raise_cost, reward, time_cost, maxAge,
 def simulationInOneYear(males, females, raise_cost, reward, time_cost, maxAge, maxPop, randomness):
     children = []
     i = 0
-    # reproduce
+    # reproduce randomly
     males[:] = np.random.permutation(males)
     for female in np.random.permutation(females):
         try:
@@ -109,14 +112,18 @@ def simulationInOneYear(males, females, raise_cost, reward, time_cost, maxAge, m
         if one.getAge() > maxAge:
             females.remove(one)
     # eliminate by population pressure
-    eliminationM = len(males) + len(children) - int(maxPop/2)
-    if eliminationM > 0:
-        males.sort(key = lambda x:x.getPayoff())
-        males[:] = males[eliminationM:]
-    eliminationF = len(females) + len(children) - int(maxPop/2)
-    if eliminationF > 0:
-        females.sort(key = lambda x:x.getPayoff())
-        females[:] = females[eliminationF:]
+    elimination = len(males) + len(females) + 2*len(children) - maxPop
+    if elimination > 0:
+        total = males[:] + females[:]
+        total.sort(key = lambda x:x.getPayoff())
+        total = total[elimination:]
+        males[:] = []
+        females[:] = []
+        for one in total:
+            if isinstance(one, Male):
+                males.append(one)
+            else:
+                females.append(one)
     for child in children:
         males.append(child[0])
         females.append(child[1])
@@ -160,12 +167,12 @@ def visual(males, females):
 pop = 200
 coy = 100
 faithful = 100
-years = 2
+years = 100
 raise_cost = -20
 reward = 0
 time_cost = -2
 maxAge = 10
 maxPop = 1000
-randomness = 0
+randomness = 0.05
 
 simulation(pop, faithful, coy, years, raise_cost, reward, time_cost, maxAge, maxPop, randomness)

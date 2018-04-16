@@ -169,7 +169,7 @@ def visual(males, females):
 pop = 200
 coy = 100
 faithful = 100
-years = 100
+years = 2
 raise_cost = -20
 reward = 0
 time_cost = -2
