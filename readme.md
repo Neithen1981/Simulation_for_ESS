@@ -1,16 +1,14 @@
 # Simulation for ESS
 
-#### The four versions of simulation are for "battle of sexes", a well-studied scene in evolutionary biology. It can be generalized to any long-term simulation of two gender strategies.
+#### The three versions of simulation are for "battle of sexes", a well-studied scene in evolutionary biology. It can be generalized to any long-term simulation of two gender strategies.
 
 `ed2.py`: no fixed sex ratio
 
 `ed3.py`: fixed sex ratio
 
-`ed4.py`: fixed sex ratio, "cunning" philanderer
+`ed6.py`: "cunning" philanderer
 
-`ed5.py`: no fixed ratio, "cunning" philanderer
-
-I recommend try `ed2.py` and `ed3.py` using the initial setting first.
+All three models are sensible to the parameters, I recommand following the setting in the program.
 
 ### Simulation Logic:
 
@@ -31,6 +29,9 @@ Under the pressure of natural selection, the population cannot grow unlimitedly.
 
 Furthermore, as the mother will look after her children anyway, their payoffs are generally lower than males, causing females to be less in the whole population. To fit into the reality that the sex ratio is roughly 1:1, the elimination process can be conducted separately for the two genders. 
 
+#### "Cunning" Philanderer
+
+Adopting the new philanderer strategy, each year, the number of offsprings will be exactly the same as the environmental capacity. Therefore, all the parents will be eliminated. To solve this problem, we propose a new model by setting a refresh rate. Each year, a certain proportion of the population with the lowest payoff will be eliminated. And they were replaced by the strategy with the highest payoff.
 
 ### Explanation and Discussion
 
@@ -41,13 +42,14 @@ When there is no mutation, i.e. offsprings will fully inherit their parents, coy
 From the perspective of ESS, we can also explain this phenomenon. ESS requires that in the population, any small proportion of different strategies would not do better, thus is stable. But without mutation, there will not be this small proportion, hence the result may not be an ESS.
 
 #### Fix sex ratio
-One of the direct influence of not fixing sex ratio is that, females will be less than males. This is because mothers will look after their children anyway even if her husband left her alone, making them inferior when competing with the male gender.
 
-The other influence is that, fixing sex ratio protects those fast females. If not fixing, coy is obviously a secure strategy. 
+One of the direct influences of not fixing sex ratio is that, females will be less than males. This is because mothers will look after their children anyway even if her husband left her alone, making them inferior when competing with the male gender.
+
+Another influence is that, fixing sex ratio protects those fast females. If not fixing, coy is obviously a secure strategy. 
 
 #### "Cunning" Philanderer
 
-If the philanderer male spend time to cheat the coy female in order to have offsprings every year, their proportion in the population will actually decrease rather than increase. This is because that, although they can have more children carrying their genes, they will spend the time-cost which decrease their advantage in the competition. Also, due to the fact that coy no longer has the ability to recognize those irresponsible fathers, their numbers will decrease as well.
+If the philanderer male spend time to cheat the coy female in order to have offsprings every year, their proportion in the population will dominate.  Also, due to the fact that coy no longer has the ability to recognize those irresponsible fathers, their numbers will decrease.
 
 
 Thanks and have fun!

@@ -38,40 +38,27 @@ class Male(Female):
     def __init__(self, strategy, payoff = 0, age = 0):
         Female.__init__(self, strategy, payoff, age)
 
-    def reproduce(self, female, randomness):
-        mS = self.strategy
-        fS = female.getStrategy()
-        if random.random() < randomness:
-            mS = mS^1
-        if random.random() < randomness:
-            fS = fS^1
-        return (Male(mS), Female(fS))
-
     def mate(self, female, raise_cost, reward, time_cost, randomness):
         if self.strategy == 0:
             if (female.getStrategy() == 0):
                 payment = raise_cost/2 + reward + time_cost
                 self.updatePayoff(payment)
                 female.updatePayoff(payment)
-                return self.reproduce(female, randomness)
             else:
                 payment = raise_cost/2 + reward
                 self.updatePayoff(payment)
                 female.updatePayoff(payment)
-                return self.reproduce(female, randomness)
         else:
             if (female.getStrategy() == 1):
                 self.updatePayoff(reward)
                 female.updatePayoff(raise_cost + reward)
-                return self.reproduce(female, randomness)
             else:
                 payment = reward + time_cost
                 self.updatePayoff(payment)
                 female.updatePayoff(raise_cost + reward + time_cost)
-                return self.reproduce(female, randomness)
 
 
-def simulation(pop, faithful, coy, years, raise_cost, reward, time_cost, maxAge, maxPop, randomness):
+def simulation(pop, faithful, coy, years, raise_cost, reward, time_cost, maxAge, refresh_rate):
     males = []
     females = []
     for i in range(faithful):
@@ -83,46 +70,28 @@ def simulation(pop, faithful, coy, years, raise_cost, reward, time_cost, maxAge,
     for i in range(pop-coy):
         females.append(Female(1))
     for year in range(years):
-        simulationInOneYear(males, females, raise_cost, reward, time_cost, maxAge, maxPop, randomness)
+        simulationInOneYear(males, females, raise_cost, reward, time_cost, maxAge, pop, refresh_rate)
         visual(males, females)
 
 
-def simulationInOneYear(males, females, raise_cost, reward, time_cost, maxAge, maxPop, randomness):
-    children = []
+def simulationInOneYear(males, females, raise_cost, reward, time_cost, maxAge, pop, refresh_rate):
     i = 0
     # reproduce
     males[:] = np.random.permutation(males)
     for female in np.random.permutation(females):
-        try:
-            children.append(males[i].mate(female, raise_cost, reward, time_cost, randomness))
-        except Exception:
-            pass
-        female.grow()
-        i += 1
-    # grow
-    for male in males:
-        male.grow()
-    # natural death
-    l = males[:]
-    for one in l:
-        if one.getAge() > maxAge:
-            males.remove(one)
-    l = females[:]
-    for one in l:
-        if one.getAge() > maxAge:
-            females.remove(one)
-    # eliminate by population pressure
-    eliminationM = len(males) + len(children) - int(maxPop/2)
-    if eliminationM > 0:
-        males.sort(key = lambda x:x.getPayoff())
-        males[:] = males[eliminationM:]
-    eliminationF = len(females) + len(children) - int(maxPop/2)
-    if eliminationF > 0:
-        females.sort(key = lambda x:x.getPayoff())
-        females[:] = females[eliminationF:]
-    for child in children:
-        males.append(child[0])
-        females.append(child[1])
+        males[i].mate(female, raise_cost, reward, time_cost, randomness)
+    # refresh
+    elimination = int(pop * refresh_rate)
+    males.sort(key = lambda x:x.getPayoff())
+    males[:] = males[elimination:]
+    winner = males[-1]
+    for i in range (elimination):
+        males.append(winner)
+    females.sort(key = lambda x:x.getPayoff())
+    females[:] = females[elimination:]
+    winner = females[-1]
+    for i in range (elimination):
+        females.append(winner)
 
 def visual(males, females):
     f = 0
@@ -160,15 +129,14 @@ def visual(males, females):
 #    plt.grid(True)  
 #    plt.show()  
 #    plt.close()  
-pop = 200
-coy = 100
-faithful = 100
+pop = 500
+coy = 250
+faithful = 250
 years = 100
 raise_cost = -20
-reward = 0
+reward = 12
 time_cost = -2
 maxAge = 10
-maxPop = 1000
-randomness = 0.05
+refresh_rate = 0.1
 
-simulation(pop, faithful, coy, years, raise_cost, reward, time_cost, maxAge, maxPop, randomness)
+simulation(pop, faithful, coy, years, raise_cost, reward, time_cost, maxAge, refresh_rate)
