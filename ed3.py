@@ -3,11 +3,6 @@ import numpy as np
 import matplotlib.mlab as mlab    
 import matplotlib.pyplot as plt    
 
-"""
-children will not fully inherit their parents
-their traits(strategy) will change at a rate of randomness
-fix sex ratio at 1:1
-"""
 
 class Female(object):
     def __init__(self, strategy, payoff = 0, age = 0):

@@ -3,10 +3,6 @@ import numpy as np
 import matplotlib.mlab as mlab    
 import matplotlib.pyplot as plt    
 
-"""
-children will not fully inherit their parents
-their traits(strategy) will change at a rate of randomness
-"""
 
 class Female(object):
     """
@@ -148,6 +144,7 @@ def visual(males, females):
     labels = ["faithful", "philanderer", "coy", "fast"]
     quants = [f, p, co, fa]
     print(quants)
+# uncomment these to draw figure
 #    width = 0.4 
 #    ind = np.linspace(0.5,9.5,4)  
 #    # make a square figure  

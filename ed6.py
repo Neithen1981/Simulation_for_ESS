@@ -3,11 +3,6 @@ import numpy as np
 import matplotlib.mlab as mlab    
 import matplotlib.pyplot as plt    
 
-"""
-children will not fully inherit their parents
-their traits(strategy) will change at a rate of randomness
-fix sex ratio at 1:1
-"""
 
 class Female(object):
     def __init__(self, strategy, payoff = 0, age = 0):
@@ -38,7 +33,7 @@ class Male(Female):
     def __init__(self, strategy, payoff = 0, age = 0):
         Female.__init__(self, strategy, payoff, age)
 
-    def mate(self, female, raise_cost, reward, time_cost, randomness):
+    def mate(self, female, raise_cost, reward, time_cost):
         if self.strategy == 0:
             if (female.getStrategy() == 0):
                 payment = raise_cost/2 + reward + time_cost
@@ -79,7 +74,7 @@ def simulationInOneYear(males, females, raise_cost, reward, time_cost, maxAge, p
     # reproduce
     males[:] = np.random.permutation(males)
     for female in np.random.permutation(females):
-        males[i].mate(female, raise_cost, reward, time_cost, randomness)
+        males[i].mate(female, raise_cost, reward, time_cost)
     # refresh
     elimination = int(pop * refresh_rate)
     males.sort(key = lambda x:x.getPayoff())
